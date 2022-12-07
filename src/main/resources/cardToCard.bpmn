@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ncf35f" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="cardToCard" name="cardToCard" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1kicjps</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1kicjps" sourceRef="StartEvent_1" targetRef="checkCardById" />
+    <bpmn:serviceTask id="checkCardById" name="checkCardById" camunda:delegateExpression="${delegateCheckCardByIdTransfer}">
+      <bpmn:incoming>Flow_1kicjps</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ps2l7n</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0ed6qn3">
+        <bpmn:targetRef>DataStoreReference_116hkpl</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ps2l7n" sourceRef="checkCardById" targetRef="Gateway_1hu5t1r" />
+    <bpmn:sequenceFlow id="Flow_1v0j77s" sourceRef="Gateway_1hu5t1r" targetRef="checkBalance">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkCardById}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1nw3m1v" sourceRef="Gateway_1hu5t1r" targetRef="Event_1rkfww9" />
+    <bpmn:endEvent id="Event_1rkfww9">
+      <bpmn:incoming>Flow_1nw3m1v</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1yu9pw6" errorRef="Error_158lj5j" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="checkBalance" name="checkBalance" camunda:delegateExpression="${delegateCheckBalance}">
+      <bpmn:incoming>Flow_1v0j77s</bpmn:incoming>
+      <bpmn:outgoing>Flow_1t8geik</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0bhujqi">
+        <bpmn:targetRef>DataStoreReference_10urynd</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_02wr2cl" default="Flow_1bxcpha">
+      <bpmn:incoming>Flow_1t8geik</bpmn:incoming>
+      <bpmn:outgoing>Flow_1eh1mcx</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1bxcpha</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1t8geik" sourceRef="checkBalance" targetRef="Gateway_02wr2cl" />
+    <bpmn:sequenceFlow id="Flow_1eh1mcx" sourceRef="Gateway_02wr2cl" targetRef="CardToCardService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkBalance}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1bxcpha" sourceRef="Gateway_02wr2cl" targetRef="Event_0rkrv7p" />
+    <bpmn:endEvent id="Event_0rkrv7p">
+      <bpmn:incoming>Flow_1bxcpha</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1s533ny" errorRef="Error_1sra0vv" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="CardToCardService" name="CardToCardService" camunda:delegateExpression="${delegateCardToCard}">
+      <bpmn:incoming>Flow_1eh1mcx</bpmn:incoming>
+      <bpmn:outgoing>Flow_08ap4sf</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0369jog">
+        <bpmn:targetRef>DataStoreReference_1505kcn</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1uxatbe">
+      <bpmn:incoming>Flow_08ap4sf</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_08ap4sf" sourceRef="CardToCardService" targetRef="Event_1uxatbe" />
+    <bpmn:subProcess id="Activity_02fhp76" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_1aklpr4">
+        <bpmn:outgoing>Flow_1xao824</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_184vg4y" camunda:errorCodeVariable="globalErrorCode" camunda:errorMessageVariable="globalErrorMessage" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1xao824" sourceRef="Event_1aklpr4" targetRef="Activity_0v32dnk" />
+      <bpmn:endEvent id="Event_0gjq7ti">
+        <bpmn:incoming>Flow_1bbzgdr</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1bbzgdr" sourceRef="Activity_0v32dnk" targetRef="Event_0gjq7ti" />
+      <bpmn:serviceTask id="Activity_0v32dnk" name="Exception" camunda:delegateExpression="${delegateMyException}">
+        <bpmn:incoming>Flow_1xao824</bpmn:incoming>
+        <bpmn:outgoing>Flow_1bbzgdr</bpmn:outgoing>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+    <bpmn:dataStoreReference id="DataStoreReference_116hkpl" />
+    <bpmn:dataStoreReference id="DataStoreReference_1505kcn" />
+    <bpmn:dataStoreReference id="DataStoreReference_10urynd" />
+    <bpmn:exclusiveGateway id="Gateway_1hu5t1r" default="Flow_1nw3m1v">
+      <bpmn:incoming>Flow_0ps2l7n</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v0j77s</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1nw3m1v</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+  </bpmn:process>
+  <bpmn:error id="Error_158lj5j" name="Error_1ea44qc" errorCode="507" camunda:errorMessage="Card not found !" />
+  <bpmn:error id="Error_1sra0vv" name="Error_0ppubl5" errorCode="508" camunda:errorMessage="Insufficient balance" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="cardToCard">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tqrxid_di" bpmnElement="checkCardById">
+        <dc:Bounds x="240" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_05ym1d1_di" bpmnElement="Event_1rkfww9">
+        <dc:Bounds x="402" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1lgf398_di" bpmnElement="checkBalance">
+        <dc:Bounds x="500" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_02wr2cl_di" bpmnElement="Gateway_02wr2cl" isMarkerVisible="true">
+        <dc:Bounds x="655" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0wgc8hi_di" bpmnElement="Event_0rkrv7p">
+        <dc:Bounds x="662" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04nv5fq_di" bpmnElement="CardToCardService">
+        <dc:Bounds x="760" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1uxatbe_di" bpmnElement="Event_1uxatbe">
+        <dc:Bounds x="922" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_116hkpl_di" bpmnElement="DataStoreReference_116hkpl">
+        <dc:Bounds x="265" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_1505kcn_di" bpmnElement="DataStoreReference_1505kcn">
+        <dc:Bounds x="785" y="295" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_10urynd_di" bpmnElement="DataStoreReference_10urynd" bioc:stroke="#e53935" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#e53935">
+        <dc:Bounds x="525" y="65" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1e2c5r9_di" bpmnElement="Gateway_1hu5t1r" isMarkerVisible="true">
+        <dc:Bounds x="395" y="175" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a86rek_di" bpmnElement="Activity_02fhp76" isExpanded="true">
+        <dc:Bounds x="400" y="370" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vg3pwe_di" bpmnElement="Event_1aklpr4">
+        <dc:Bounds x="440" y="452" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gjq7ti_di" bpmnElement="Event_0gjq7ti">
+        <dc:Bounds x="682" y="482" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18hio9h_di" bpmnElement="Activity_0v32dnk">
+        <dc:Bounds x="530" y="430" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1xao824_di" bpmnElement="Flow_1xao824">
+        <di:waypoint x="476" y="470" />
+        <di:waypoint x="530" y="470" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bbzgdr_di" bpmnElement="Flow_1bbzgdr">
+        <di:waypoint x="630" y="470" />
+        <di:waypoint x="656" y="470" />
+        <di:waypoint x="656" y="500" />
+        <di:waypoint x="682" y="500" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kicjps_di" bpmnElement="Flow_1kicjps">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="240" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0ed6qn3_di" bpmnElement="DataOutputAssociation_0ed6qn3">
+        <di:waypoint x="290" y="240" />
+        <di:waypoint x="290" y="295" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ps2l7n_di" bpmnElement="Flow_0ps2l7n">
+        <di:waypoint x="340" y="200" />
+        <di:waypoint x="395" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v0j77s_di" bpmnElement="Flow_1v0j77s">
+        <di:waypoint x="445" y="200" />
+        <di:waypoint x="500" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nw3m1v_di" bpmnElement="Flow_1nw3m1v">
+        <di:waypoint x="420" y="175" />
+        <di:waypoint x="420" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0bhujqi_di" bpmnElement="DataOutputAssociation_0bhujqi">
+        <di:waypoint x="550" y="160" />
+        <di:waypoint x="550" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t8geik_di" bpmnElement="Flow_1t8geik">
+        <di:waypoint x="600" y="200" />
+        <di:waypoint x="655" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1eh1mcx_di" bpmnElement="Flow_1eh1mcx">
+        <di:waypoint x="705" y="200" />
+        <di:waypoint x="760" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bxcpha_di" bpmnElement="Flow_1bxcpha">
+        <di:waypoint x="680" y="175" />
+        <di:waypoint x="680" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0369jog_di" bpmnElement="DataOutputAssociation_0369jog">
+        <di:waypoint x="810" y="240" />
+        <di:waypoint x="810" y="295" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08ap4sf_di" bpmnElement="Flow_08ap4sf">
+        <di:waypoint x="860" y="200" />
+        <di:waypoint x="922" y="200" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

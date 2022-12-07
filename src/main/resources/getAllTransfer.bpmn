@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_18d7zj0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="getAllTransfer" name="getAllTransfer" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0hvbpgi</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0hvbpgi" sourceRef="StartEvent_1" targetRef="AllTransfer" />
+    <bpmn:endEvent id="Event_07f3g8m">
+      <bpmn:incoming>Flow_112jn7w</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_112jn7w" sourceRef="AllTransfer" targetRef="Event_07f3g8m" />
+    <bpmn:serviceTask id="AllTransfer" name="AllTransfer" camunda:delegateExpression="${delegateGetAllTransfer}">
+      <bpmn:incoming>Flow_0hvbpgi</bpmn:incoming>
+      <bpmn:outgoing>Flow_112jn7w</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_176wwjy">
+        <bpmn:targetRef>DataStoreReference_0g7n8hv</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:dataStoreReference id="DataStoreReference_0g7n8hv" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="getAllTransfer">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="252" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07f3g8m_di" bpmnElement="Event_07f3g8m">
+        <dc:Bounds x="432" y="252" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0igm32d_di" bpmnElement="AllTransfer">
+        <dc:Bounds x="270" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0g7n8hv_di" bpmnElement="DataStoreReference_0g7n8hv">
+        <dc:Bounds x="295" y="125" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0hvbpgi_di" bpmnElement="Flow_0hvbpgi">
+        <di:waypoint x="215" y="270" />
+        <di:waypoint x="270" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_112jn7w_di" bpmnElement="Flow_112jn7w">
+        <di:waypoint x="370" y="270" />
+        <di:waypoint x="432" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_176wwjy_di" bpmnElement="DataOutputAssociation_176wwjy">
+        <di:waypoint x="320" y="230" />
+        <di:waypoint x="320" y="175" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0la9ei4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="putAccount" name="putAccount" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1bnem25</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1bnem25" sourceRef="StartEvent_1" targetRef="Activity_0ta6394" />
+    <bpmn:serviceTask id="Activity_0ta6394" name="Check account by id" camunda:delegateExpression="${delegateCheckAccountById}">
+      <bpmn:incoming>Flow_1bnem25</bpmn:incoming>
+      <bpmn:outgoing>Flow_1adw86o</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_1jr25ts">
+        <bpmn:targetRef>DataStoreReference_0lo52m7</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1adw86o" sourceRef="Activity_0ta6394" targetRef="Gateway_0ri4km9" />
+    <bpmn:sequenceFlow id="Flow_0d3b028" sourceRef="Gateway_0ri4km9" targetRef="putAccountService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkAccountById}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_06owukp" sourceRef="Gateway_0ri4km9" targetRef="Event_16n583z" />
+    <bpmn:endEvent id="Event_16n583z">
+      <bpmn:incoming>Flow_06owukp</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1hjfive" errorRef="Error_1fm5y8l" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="putAccountService" name="putAccountService" camunda:delegateExpression="${delegatePutAccount}">
+      <bpmn:incoming>Flow_0d3b028</bpmn:incoming>
+      <bpmn:outgoing>Flow_12s7v69</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_1l296c8">
+        <bpmn:targetRef>DataStoreReference_0nvwdkd</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0nxidvo">
+      <bpmn:incoming>Flow_12s7v69</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_12s7v69" sourceRef="putAccountService" targetRef="Event_0nxidvo" />
+    <bpmn:dataStoreReference id="DataStoreReference_0lo52m7" />
+    <bpmn:dataStoreReference id="DataStoreReference_0nvwdkd" />
+    <bpmn:subProcess id="Activity_093awjb" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_02j06hg">
+        <bpmn:outgoing>Flow_1wyagll</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0f6sjwv" camunda:errorCodeVariable="globalErrorCode" camunda:errorMessageVariable="globalErrorMessage" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1wyagll" sourceRef="Event_02j06hg" targetRef="Activity_168g8ua" />
+      <bpmn:endEvent id="Event_1lpebaj">
+        <bpmn:incoming>Flow_01ougjr</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_01ougjr" sourceRef="Activity_168g8ua" targetRef="Event_1lpebaj" />
+      <bpmn:serviceTask id="Activity_168g8ua" name="Exception" camunda:delegateExpression="${delegateMyException}">
+        <bpmn:incoming>Flow_1wyagll</bpmn:incoming>
+        <bpmn:outgoing>Flow_01ougjr</bpmn:outgoing>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+    <bpmn:exclusiveGateway id="Gateway_0ri4km9" default="Flow_06owukp">
+      <bpmn:incoming>Flow_1adw86o</bpmn:incoming>
+      <bpmn:outgoing>Flow_0d3b028</bpmn:outgoing>
+      <bpmn:outgoing>Flow_06owukp</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+  </bpmn:process>
+  <bpmn:error id="Error_1fm5y8l" name="Error_0hdte5s" errorCode="505" camunda:errorMessage="Account not found!" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="putAccount">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="132" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0hste11_di" bpmnElement="Activity_0ta6394">
+        <dc:Bounds x="220" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ik6j63_di" bpmnElement="Event_16n583z">
+        <dc:Bounds x="382" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_19a4d55_di" bpmnElement="putAccountService">
+        <dc:Bounds x="480" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0nxidvo_di" bpmnElement="Event_0nxidvo">
+        <dc:Bounds x="642" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0lo52m7_di" bpmnElement="DataStoreReference_0lo52m7">
+        <dc:Bounds x="245" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0nvwdkd_di" bpmnElement="DataStoreReference_0nvwdkd">
+        <dc:Bounds x="505" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0i6hl3l_di" bpmnElement="Gateway_0ri4km9" isMarkerVisible="true">
+        <dc:Bounds x="375" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qn5oir_di" bpmnElement="Activity_093awjb" isExpanded="true">
+        <dc:Bounds x="660" y="290" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1y2uz19_di" bpmnElement="Event_02j06hg">
+        <dc:Bounds x="700" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1lpebaj_di" bpmnElement="Event_1lpebaj">
+        <dc:Bounds x="952" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05rx4j1_di" bpmnElement="Activity_168g8ua">
+        <dc:Bounds x="790" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1wyagll_di" bpmnElement="Flow_1wyagll">
+        <di:waypoint x="736" y="390" />
+        <di:waypoint x="790" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01ougjr_di" bpmnElement="Flow_01ougjr">
+        <di:waypoint x="890" y="390" />
+        <di:waypoint x="952" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bnem25_di" bpmnElement="Flow_1bnem25">
+        <di:waypoint x="168" y="220" />
+        <di:waypoint x="220" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1adw86o_di" bpmnElement="Flow_1adw86o">
+        <di:waypoint x="320" y="220" />
+        <di:waypoint x="375" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1jr25ts_di" bpmnElement="DataOutputAssociation_1jr25ts">
+        <di:waypoint x="270" y="180" />
+        <di:waypoint x="270" y="135" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0d3b028_di" bpmnElement="Flow_0d3b028">
+        <di:waypoint x="425" y="220" />
+        <di:waypoint x="480" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06owukp_di" bpmnElement="Flow_06owukp">
+        <di:waypoint x="400" y="195" />
+        <di:waypoint x="400" y="138" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12s7v69_di" bpmnElement="Flow_12s7v69">
+        <di:waypoint x="580" y="220" />
+        <di:waypoint x="642" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1l296c8_di" bpmnElement="DataOutputAssociation_1l296c8">
+        <di:waypoint x="530" y="180" />
+        <di:waypoint x="530" y="140" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

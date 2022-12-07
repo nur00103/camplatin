@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1c5fcfb" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="getAllCard" name="getAllCard" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0sqh19a</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0sqh19a" sourceRef="StartEvent_1" targetRef="getAllCardService" />
+    <bpmn:endEvent id="Event_0zmdt27">
+      <bpmn:incoming>Flow_0fti0de</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0fti0de" sourceRef="getAllCardService" targetRef="Event_0zmdt27" />
+    <bpmn:dataStoreReference id="DataStoreReference_0lgukar" />
+    <bpmn:serviceTask id="getAllCardService" name="getAllCardService" camunda:delegateExpression="${delegateGetAllCard}">
+      <bpmn:incoming>Flow_0sqh19a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fti0de</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0uccohq">
+        <bpmn:targetRef>DataStoreReference_0lgukar</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="getAllCard">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0zmdt27_di" bpmnElement="Event_0zmdt27">
+        <dc:Bounds x="392" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0lgukar_di" bpmnElement="DataStoreReference_0lgukar">
+        <dc:Bounds x="265" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0zw9vsr_di" bpmnElement="getAllCardService">
+        <dc:Bounds x="240" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0sqh19a_di" bpmnElement="Flow_0sqh19a">
+        <di:waypoint x="188" y="240" />
+        <di:waypoint x="240" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fti0de_di" bpmnElement="Flow_0fti0de">
+        <di:waypoint x="340" y="240" />
+        <di:waypoint x="392" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0uccohq_di" bpmnElement="DataOutputAssociation_0uccohq">
+        <di:waypoint x="290" y="200" />
+        <di:waypoint x="290" y="135" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

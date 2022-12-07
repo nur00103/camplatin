@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0j8y19q" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="postCard" name="postCard" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_048mrlt</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_048mrlt" sourceRef="StartEvent_1" targetRef="checkCardNumber" />
+    <bpmn:serviceTask id="checkCardNumber" name="checkCardNumber" camunda:delegateExpression="${delegateCheckCardNumber}">
+      <bpmn:incoming>Flow_048mrlt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pqi86j</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_1vwwup5">
+        <bpmn:targetRef>DataStoreReference_0g3mllh</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_02vzsj3" default="Flow_1gpo44d">
+      <bpmn:incoming>Flow_0pqi86j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0v9dt5e</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1gpo44d</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0pqi86j" sourceRef="checkCardNumber" targetRef="Gateway_02vzsj3" />
+    <bpmn:sequenceFlow id="Flow_0v9dt5e" sourceRef="Gateway_02vzsj3" targetRef="checkAccountById">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkCardNumber}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1gpo44d" sourceRef="Gateway_02vzsj3" targetRef="Event_0jd4fl5" />
+    <bpmn:dataStoreReference id="DataStoreReference_0g3mllh" />
+    <bpmn:endEvent id="Event_0jd4fl5">
+      <bpmn:incoming>Flow_1gpo44d</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0rhc6zn" errorRef="Error_1gjdsr3" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="checkAccountById" name="checkAccountById" camunda:delegateExpression="${delegateCheckAccountId}">
+      <bpmn:incoming>Flow_0v9dt5e</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jkbt01</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_14uedch">
+        <bpmn:targetRef>DataStoreReference_0xibjrd</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_02407e6" default="Flow_13k3ixf">
+      <bpmn:incoming>Flow_0jkbt01</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v2a94u</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13k3ixf</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0jkbt01" sourceRef="checkAccountById" targetRef="Gateway_02407e6" />
+    <bpmn:sequenceFlow id="Flow_1v2a94u" sourceRef="Gateway_02407e6" targetRef="setBalanceToAccount">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkAccountId}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_13k3ixf" sourceRef="Gateway_02407e6" targetRef="Event_0k8v3vs" />
+    <bpmn:endEvent id="Event_0k8v3vs">
+      <bpmn:incoming>Flow_13k3ixf</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1o19ors" errorRef="Error_1lbzqp3" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="setBalanceToAccount" name="setCardBalance ToAccount" camunda:delegateExpression="${delegateSetCardBalanceToAccount}">
+      <bpmn:incoming>Flow_1v2a94u</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ebs59g</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0yjm1y3">
+        <bpmn:targetRef>DataStoreReference_02evm4r</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ebs59g" sourceRef="setBalanceToAccount" targetRef="Gateway_0tjqgn0" />
+    <bpmn:serviceTask id="postCardService" name="postCardService" camunda:delegateExpression="${delegatePostCard}">
+      <bpmn:incoming>Flow_0sb4rqt</bpmn:incoming>
+      <bpmn:outgoing>Flow_08mu7ku</bpmn:outgoing>
+      <bpmn:dataOutputAssociation id="DataOutputAssociation_0e5n7fe">
+        <bpmn:targetRef>DataStoreReference_1vs6h5w</bpmn:targetRef>
+      </bpmn:dataOutputAssociation>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0tyoip4">
+      <bpmn:incoming>Flow_08mu7ku</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_08mu7ku" sourceRef="postCardService" targetRef="Event_0tyoip4" />
+    <bpmn:subProcess id="Activity_1s8b2tj" triggeredByEvent="true">
+      <bpmn:sequenceFlow id="Flow_08e5z30" sourceRef="Event_1pajfx5" targetRef="Activity_1o5m0dw" />
+      <bpmn:endEvent id="Event_1inss1w">
+        <bpmn:incoming>Flow_0b8lmj6</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0b8lmj6" sourceRef="Activity_1o5m0dw" targetRef="Event_1inss1w" />
+      <bpmn:serviceTask id="Activity_1o5m0dw" name="Exception" camunda:delegateExpression="${delegateMyException}">
+        <bpmn:incoming>Flow_08e5z30</bpmn:incoming>
+        <bpmn:outgoing>Flow_0b8lmj6</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:startEvent id="Event_1pajfx5">
+        <bpmn:outgoing>Flow_08e5z30</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_07qa40u" camunda:errorCodeVariable="globalErrorCode" camunda:errorMessageVariable="globalErrorMessage" />
+      </bpmn:startEvent>
+    </bpmn:subProcess>
+    <bpmn:exclusiveGateway id="Gateway_0tjqgn0" default="Flow_13miutl">
+      <bpmn:incoming>Flow_0ebs59g</bpmn:incoming>
+      <bpmn:outgoing>Flow_0sb4rqt</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13miutl</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0sb4rqt" sourceRef="Gateway_0tjqgn0" targetRef="postCardService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${info}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_13miutl" sourceRef="Gateway_0tjqgn0" targetRef="Event_05m9onb" />
+    <bpmn:endEvent id="Event_05m9onb">
+      <bpmn:incoming>Flow_13miutl</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_03normw" errorRef="Error_1q4v64n" />
+    </bpmn:endEvent>
+    <bpmn:dataStoreReference id="DataStoreReference_0xibjrd" />
+    <bpmn:dataStoreReference id="DataStoreReference_02evm4r" />
+    <bpmn:dataStoreReference id="DataStoreReference_1vs6h5w" />
+  </bpmn:process>
+  <bpmn:error id="Error_1gjdsr3" name="Error_1vlm81t" errorCode="506" camunda:errorMessage="Card number is already exist!" />
+  <bpmn:error id="Error_1lbzqp3" name="Error_3jv77uf" errorCode="506" camunda:errorMessage="Account not found with given id!" />
+  <bpmn:error id="Error_1q4v64n" name="Error_2ti23v3" errorCode="507" camunda:errorMessage="Balance is not correct!" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="postCard">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="212" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_104shsy_di" bpmnElement="checkCardNumber">
+        <dc:Bounds x="240" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_02vzsj3_di" bpmnElement="Gateway_02vzsj3" isMarkerVisible="true">
+        <dc:Bounds x="395" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0g3mllh_di" bpmnElement="DataStoreReference_0g3mllh">
+        <dc:Bounds x="265" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_163q98s_di" bpmnElement="Event_0jd4fl5">
+        <dc:Bounds x="402" y="112" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jso86s_di" bpmnElement="checkAccountById">
+        <dc:Bounds x="500" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_02407e6_di" bpmnElement="Gateway_02407e6" isMarkerVisible="true">
+        <dc:Bounds x="655" y="205" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10g67wp_di" bpmnElement="Event_0k8v3vs">
+        <dc:Bounds x="662" y="112" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09m489q_di" bpmnElement="setBalanceToAccount">
+        <dc:Bounds x="760" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wwm3jp_di" bpmnElement="postCardService">
+        <dc:Bounds x="760" y="400" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0tjqgn0_di" bpmnElement="Gateway_0tjqgn0" isMarkerVisible="true">
+        <dc:Bounds x="785" y="305" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0tyoip4_di" bpmnElement="Event_0tyoip4">
+        <dc:Bounds x="953" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ym75rw_di" bpmnElement="Event_05m9onb">
+        <dc:Bounds x="692" y="312" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_0xibjrd_di" bpmnElement="DataStoreReference_0xibjrd">
+        <dc:Bounds x="525" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_1vs6h5w_di" bpmnElement="DataStoreReference_1vs6h5w">
+        <dc:Bounds x="675" y="415" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="DataStoreReference_02evm4r_di" bpmnElement="DataStoreReference_02evm4r">
+        <dc:Bounds x="785" y="85" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0afz88e_di" bpmnElement="Activity_1s8b2tj" isExpanded="true">
+        <dc:Bounds x="230" y="350" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1inss1w_di" bpmnElement="Event_1inss1w">
+        <dc:Bounds x="522" y="432" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0qwa4it_di" bpmnElement="Activity_1o5m0dw">
+        <dc:Bounds x="360" y="410" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0hd3ile_di" bpmnElement="Event_1pajfx5">
+        <dc:Bounds x="270" y="432" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08e5z30_di" bpmnElement="Flow_08e5z30">
+        <di:waypoint x="306" y="450" />
+        <di:waypoint x="360" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b8lmj6_di" bpmnElement="Flow_0b8lmj6">
+        <di:waypoint x="460" y="450" />
+        <di:waypoint x="522" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_048mrlt_di" bpmnElement="Flow_048mrlt">
+        <di:waypoint x="188" y="230" />
+        <di:waypoint x="240" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pqi86j_di" bpmnElement="Flow_0pqi86j">
+        <di:waypoint x="340" y="230" />
+        <di:waypoint x="395" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_1vwwup5_di" bpmnElement="DataOutputAssociation_1vwwup5">
+        <di:waypoint x="290" y="190" />
+        <di:waypoint x="290" y="135" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0v9dt5e_di" bpmnElement="Flow_0v9dt5e">
+        <di:waypoint x="445" y="230" />
+        <di:waypoint x="500" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gpo44d_di" bpmnElement="Flow_1gpo44d">
+        <di:waypoint x="420" y="205" />
+        <di:waypoint x="420" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jkbt01_di" bpmnElement="Flow_0jkbt01">
+        <di:waypoint x="600" y="230" />
+        <di:waypoint x="655" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v2a94u_di" bpmnElement="Flow_1v2a94u">
+        <di:waypoint x="705" y="230" />
+        <di:waypoint x="760" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13k3ixf_di" bpmnElement="Flow_13k3ixf">
+        <di:waypoint x="680" y="205" />
+        <di:waypoint x="680" y="148" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ebs59g_di" bpmnElement="Flow_0ebs59g">
+        <di:waypoint x="810" y="270" />
+        <di:waypoint x="810" y="305" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08mu7ku_di" bpmnElement="Flow_08mu7ku">
+        <di:waypoint x="860" y="440" />
+        <di:waypoint x="953" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sb4rqt_di" bpmnElement="Flow_0sb4rqt">
+        <di:waypoint x="810" y="355" />
+        <di:waypoint x="810" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13miutl_di" bpmnElement="Flow_13miutl">
+        <di:waypoint x="785" y="330" />
+        <di:waypoint x="728" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_14uedch_di" bpmnElement="DataOutputAssociation_14uedch">
+        <di:waypoint x="550" y="190" />
+        <di:waypoint x="550" y="135" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0yjm1y3_di" bpmnElement="DataOutputAssociation_0yjm1y3">
+        <di:waypoint x="810" y="190" />
+        <di:waypoint x="810" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="DataOutputAssociation_0e5n7fe_di" bpmnElement="DataOutputAssociation_0e5n7fe">
+        <di:waypoint x="760" y="440" />
+        <di:waypoint x="725" y="440" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_148uij1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.1" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="getAccountById" name="getAccountById" isExecutable="true">
+    <bpmn:startEvent id="getByIdAccount" name="getByIdAccount">
+      <bpmn:outgoing>Flow_1wc8570</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1wc8570" sourceRef="getByIdAccount" targetRef="CheckAccountById" />
+    <bpmn:exclusiveGateway id="Gateway_1g9czr6" default="Flow_1gbxdp6">
+      <bpmn:incoming>Flow_0encv8o</bpmn:incoming>
+      <bpmn:outgoing>Flow_05gc4f6</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1gbxdp6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0encv8o" sourceRef="CheckAccountById" targetRef="Gateway_1g9czr6" />
+    <bpmn:sequenceFlow id="Flow_05gc4f6" sourceRef="Gateway_1g9czr6" targetRef="getByIdAccountService">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${checkAccountById}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_03etbf1">
+      <bpmn:incoming>Flow_1otsnjd</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1otsnjd" sourceRef="getByIdAccountService" targetRef="Event_03etbf1" />
+    <bpmn:sequenceFlow id="Flow_1gbxdp6" sourceRef="Gateway_1g9czr6" targetRef="Event_0o6udla" />
+    <bpmn:endEvent id="Event_0o6udla">
+      <bpmn:incoming>Flow_1gbxdp6</bpmn:incoming>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0t99zzg" errorRef="Error_0tx1eg7" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="CheckAccountById" name="CheckAccountById" camunda:delegateExpression="${delegateCheckAccountById}">
+      <bpmn:incoming>Flow_1wc8570</bpmn:incoming>
+      <bpmn:outgoing>Flow_0encv8o</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="getByIdAccountService" name="getByIdAccount" camunda:delegateExpression="${delegateGetByIdAccount}">
+      <bpmn:incoming>Flow_05gc4f6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1otsnjd</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:subProcess id="Activity_0y8zp72" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_0w8msif">
+        <bpmn:outgoing>Flow_1648n5z</bpmn:outgoing>
+        <bpmn:errorEventDefinition id="ErrorEventDefinition_0nq2t0o" camunda:errorCodeVariable="globalErrorCode" camunda:errorMessageVariable="globalErrorMessage" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1648n5z" sourceRef="Event_0w8msif" targetRef="throwException" />
+      <bpmn:endEvent id="Event_1tbnfjk">
+        <bpmn:incoming>Flow_0ozy79g</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0ozy79g" sourceRef="throwException" targetRef="Event_1tbnfjk" />
+      <bpmn:serviceTask id="throwException" name="throwException" camunda:delegateExpression="${delegateMyException}">
+        <bpmn:incoming>Flow_1648n5z</bpmn:incoming>
+        <bpmn:outgoing>Flow_0ozy79g</bpmn:outgoing>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+  </bpmn:process>
+  <bpmn:error id="Error_0tx1eg7" name="Error_1pdah5h" errorCode="401" camunda:errorMessage="Account not found!" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="getAccountById">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="getByIdAccount">
+        <dc:Bounds x="142" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="123" y="245" width="77" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wfsirb_di" bpmnElement="CheckAccountById">
+        <dc:Bounds x="230" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03etbf1_di" bpmnElement="Event_03etbf1">
+        <dc:Bounds x="742" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1epbi1i_di" bpmnElement="getByIdAccountService">
+        <dc:Bounds x="540" y="180" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1g9czr6_di" bpmnElement="Gateway_1g9czr6" isMarkerVisible="true">
+        <dc:Bounds x="405" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1kvo9bk_di" bpmnElement="Event_0o6udla">
+        <dc:Bounds x="412" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jxo3cw_di" bpmnElement="Activity_0y8zp72" isExpanded="true">
+        <dc:Bounds x="620" y="290" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10wtipc_di" bpmnElement="Event_0w8msif">
+        <dc:Bounds x="660" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1tbnfjk_di" bpmnElement="Event_1tbnfjk">
+        <dc:Bounds x="912" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0rx3nso_di" bpmnElement="throwException">
+        <dc:Bounds x="750" y="350" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1648n5z_di" bpmnElement="Flow_1648n5z">
+        <di:waypoint x="696" y="390" />
+        <di:waypoint x="750" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ozy79g_di" bpmnElement="Flow_0ozy79g">
+        <di:waypoint x="850" y="390" />
+        <di:waypoint x="912" y="390" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wc8570_di" bpmnElement="Flow_1wc8570">
+        <di:waypoint x="178" y="220" />
+        <di:waypoint x="230" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0encv8o_di" bpmnElement="Flow_0encv8o">
+        <di:waypoint x="330" y="220" />
+        <di:waypoint x="405" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05gc4f6_di" bpmnElement="Flow_05gc4f6">
+        <di:waypoint x="455" y="220" />
+        <di:waypoint x="540" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gbxdp6_di" bpmnElement="Flow_1gbxdp6">
+        <di:waypoint x="430" y="195" />
+        <di:waypoint x="430" y="118" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1otsnjd_di" bpmnElement="Flow_1otsnjd">
+        <di:waypoint x="640" y="220" />
+        <di:waypoint x="742" y="220" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
